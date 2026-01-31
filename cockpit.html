@@ -2,38 +2,433 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>DIGIY PRO — Cockpit</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#061b14"/>
+  <title>DIGIY FRET CHAUFFEUR PRO — Cockpit</title>
+
   <script src="./guard.js"></script>
 
   <style>
+    :root{
+      --bg:#061b14; --bg2:#0a2b1f; --line:rgba(255,255,255,.14);
+      --text:#eafff1; --muted:rgba(234,255,241,.72);
+      --gold:#facc15; --ok:#22c55e; --bad:#fb7185;
+      --shadow:0 18px 55px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family:system-ui;
-      background:#061b14;
-      color:#eafff1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:100vh;
-      text-align:center;
+      margin:0; color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto;
+      background:
+        radial-gradient(circle at top, rgba(250,204,21,.10), transparent 55%),
+        linear-gradient(135deg,var(--bg),var(--bg2));
+      padding:16px;
     }
+    .wrap{max-width:1060px;margin:0 auto}
+    .top{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      background:linear-gradient(145deg,rgba(11,42,31,.96),rgba(6,35,25,.96));
+      border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .ico{
+      width:48px;height:48px;border-radius:50%;
+      display:grid;place-items:center;
+      background:radial-gradient(circle at 30% 0,var(--gold),transparent 60%);
+      color:#062015;font-weight:1000;border:1px solid rgba(250,204,21,.35);
+    }
+    h1{margin:0;font-size:16px;letter-spacing:.10em}
+    .sub{margin-top:5px;font-size:12px;color:var(--muted);line-height:1.4}
+    .pill{
+      border:1px solid var(--line); background:rgba(250,204,21,.10);
+      padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900;white-space:nowrap;
+    }
+
+    .grid{display:grid;gap:12px;margin-top:12px}
+    @media(min-width:900px){ .grid{grid-template-columns:1.15fr .85fr} }
+
     .card{
-      padding:30px;
-      border:1px solid rgba(255,255,255,.15);
-      border-radius:18px;
-      background:rgba(255,255,255,.04);
-      max-width:520px;
+      background:linear-gradient(145deg,rgba(11,42,31,.92),rgba(6,35,25,.92));
+      border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+      padding:14px;
     }
-    h1{margin:0;font-size:22px}
-    p{opacity:.8;margin-top:10px}
+    .title{font-weight:1000;letter-spacing:.08em;font-size:12px;color:rgba(234,255,241,.85)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      flex:1; min-width:210px;
+      padding:12px 14px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(0,0,0,.18); color:var(--text);
+      font-weight:1000; cursor:pointer;
+    }
+    .btn:hover{border-color:rgba(250,204,21,.55)}
+    .btn.primary{
+      background:linear-gradient(90deg,var(--ok),var(--gold));
+      color:#062015;border:none;
+    }
+    .btn.danger{
+      border-color:rgba(251,113,133,.35);
+      background:rgba(251,113,133,.10);
+    }
+
+    .kpis{display:grid;gap:10px;margin-top:10px}
+    @media(min-width:520px){ .kpis{grid-template-columns:repeat(2,1fr)} }
+    .kpi{
+      padding:12px;border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.18);
+    }
+    .kpi .k{font-size:12px;color:var(--muted)}
+    .kpi .v{font-size:20px;font-weight:1000;margin-top:6px}
+    .kpi .s{font-size:12px;color:rgba(234,255,241,.78);margin-top:4px}
+
+    .list{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:16px;overflow:hidden}
+    .item{
+      padding:12px;border-top:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.14);
+      display:flex;justify-content:space-between;gap:10px;align-items:flex-start;
+    }
+    .item:first-child{border-top:none}
+    .a{font-weight:1000}
+    .b{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
+    .badge{
+      font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(250,204,21,.10);
+      white-space:nowrap;
+    }
+    .badge.ok{background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.35)}
+    .badge.bad{background:rgba(251,113,133,.12); border-color:rgba(251,113,133,.35)}
+    .badge.neutral{background:rgba(148,163,184,.10); border-color:rgba(148,163,184,.28)}
+    select{
+      border-radius:14px;border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.18); color:var(--text);
+      padding:10px 12px; outline:none;
+      font-weight:900;
+    }
+    .hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.45}
+    .tiny{font-size:11px;color:rgba(234,255,241,.66)}
+    .split{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .split .btn{min-width:170px}
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>🦅 Cockpit DIGIY PRO</h1>
-    <p>Ton module est actif. Ici tu construis ton tableau de bord métier.</p>
+<div class="wrap">
+
+  <div class="top">
+    <div class="brand">
+      <div class="ico">🦅</div>
+      <div>
+        <h1>🚚 FRET CHAUFFEUR PRO — Cockpit</h1>
+        <div class="sub">
+          SLUG: <b id="slug">—</b> • OWNER: <b id="owner">—</b><br>
+          Statut: <b class="muted" id="stat">session OK</b>
+        </div>
+      </div>
+    </div>
+    <div class="pill">fret_driver_pro</div>
   </div>
+
+  <div class="grid">
+
+    <!-- LEFT -->
+    <div class="card">
+      <div class="title">⚡ ACTIONS RAPIDES</div>
+      <div class="row">
+        <button class="btn primary" id="btnToggle">🟢 Disponible</button>
+        <button class="btn" id="btnNew">➕ Ajouter une course</button>
+        <button class="btn" id="btnPulse">🔔 Inbox</button>
+      </div>
+
+      <div style="height:10px"></div>
+      <div class="title">🌡️ TEMPÉRATURE CHAUFFEUR</div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k">En attente</div>
+          <div class="v" id="kPending">—</div>
+          <div class="s">à accepter</div>
+        </div>
+        <div class="kpi">
+          <div class="k">En cours</div>
+          <div class="v" id="kOngoing">—</div>
+          <div class="s">prises</div>
+        </div>
+        <div class="kpi">
+          <div class="k">Livrées</div>
+          <div class="v" id="kDone">—</div>
+          <div class="s">terminées</div>
+        </div>
+        <div class="kpi">
+          <div class="k">Annulées</div>
+          <div class="v" id="kCancel">—</div>
+          <div class="s">refusées</div>
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <div class="split">
+        <div class="title" style="flex:1">📋 COURSES</div>
+        <select id="filter" style="max-width:260px">
+          <option value="all">Toutes</option>
+          <option value="pending">En attente</option>
+          <option value="accepted">Acceptées</option>
+          <option value="delivered">Livrées</option>
+          <option value="cancelled">Annulées</option>
+        </select>
+        <select id="zone" style="max-width:260px">
+          <option value="saly">Zone: Saly</option>
+          <option value="dakar">Zone: Dakar</option>
+          <option value="thies">Zone: Thiès</option>
+          <option value="autre">Zone: Autre</option>
+        </select>
+      </div>
+
+      <div class="list" id="list"></div>
+
+      <div class="hint">
+        <b>V1 Terrain :</b> stockage local par slug chauffeur (ça tourne direct).<br>
+        <span class="tiny">V2 : on reçoit les demandes du module Client + Pulse.</span>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="card">
+      <div class="title">🛟 SUPPORT</div>
+      <div class="row">
+        <button class="btn" id="btnHelp">💬 WhatsApp Support</button>
+        <button class="btn" id="btnLogout">🚪 Déconnexion</button>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="title">🧩 OUTILS</div>
+      <div class="row">
+        <button class="btn" id="btnExport">⬇️ Export JSON</button>
+        <button class="btn danger" id="btnReset">🧹 Reset Démo</button>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="title">🔔 INBOX (placeholder)</div>
+      <div class="list">
+        <div class="item">
+          <div>
+            <div class="a">Aucun message</div>
+            <div class="b">V2 : Pulse/outbox branchés ici.</div>
+          </div>
+          <div class="badge neutral">OK</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const s = window.DIGIY_ACCESS || {};
+  const slug = (s.slug || "").toLowerCase();
+  document.getElementById("slug").textContent = s.slug || "—";
+  document.getElementById("owner").textContent = s.owner_id || "—";
+
+  const KEY = "DIGIY_FRET_DRIVER_JOBS::" + (slug || "noslug");
+  const KEY_STATUS = "DIGIY_FRET_DRIVER_STATUS::" + (slug || "noslug");
+
+  function uid(){
+    return (crypto?.randomUUID ? crypto.randomUUID() : ("id_"+Math.random().toString(16).slice(2)+Date.now()));
+  }
+  function nowISO(){ return new Date().toISOString(); }
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY) || "[]"); }catch(_){ return []; }
+  }
+  function save(rows){ localStorage.setItem(KEY, JSON.stringify(rows)); }
+  function readStatus(){
+    try{ return JSON.parse(localStorage.getItem(KEY_STATUS) || "null"); }catch(_){ return null; }
+  }
+  function writeStatus(st){ localStorage.setItem(KEY_STATUS, JSON.stringify(st)); }
+
+  function badge(st){
+    if(st==="pending") return `<span class="badge neutral">EN ATTENTE</span>`;
+    if(st==="accepted") return `<span class="badge ok">PRISE</span>`;
+    if(st==="delivered") return `<span class="badge ok">LIVRÉE</span>`;
+    if(st==="cancelled") return `<span class="badge bad">ANNULÉE</span>`;
+    return `<span class="badge neutral">${String(st||"—").toUpperCase()}</span>`;
+  }
+
+  function render(){
+    const rows = load().sort((a,b)=> (b.created_at||"").localeCompare(a.created_at||""));
+    const filter = document.getElementById("filter").value;
+
+    const pending = rows.filter(r=>r.status==="pending");
+    const ongoing = rows.filter(r=>r.status==="accepted");
+    const done = rows.filter(r=>r.status==="delivered");
+    const cancel = rows.filter(r=>r.status==="cancelled");
+
+    document.getElementById("kPending").textContent = String(pending.length);
+    document.getElementById("kOngoing").textContent = String(ongoing.length);
+    document.getElementById("kDone").textContent = String(done.length);
+    document.getElementById("kCancel").textContent = String(cancel.length);
+
+    let view = rows;
+    if(filter !== "all") view = rows.filter(r=>r.status===filter);
+
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    if(view.length===0){
+      list.innerHTML = `
+        <div class="item">
+          <div>
+            <div class="a">Aucune course</div>
+            <div class="b">Clique “Ajouter une course” pour la démo. (V2: elles arrivent du module Client)</div>
+          </div>
+          <div class="badge neutral">VIDE</div>
+        </div>`;
+      return;
+    }
+
+    for(const r of view){
+      const title = `${r.from || "—"} → ${r.to || "—"}`;
+      const sub = [
+        `Client: ${r.client || "—"} (${r.phone || "—"})`,
+        `Zone: ${r.zone || "—"} • Prix: ${r.price ? (Number(r.price)||0).toLocaleString("fr-FR")+" FCFA" : "—"}`,
+        r.note ? `Note: ${r.note}` : null,
+        `Créé: ${new Date(r.created_at).toLocaleString("fr-FR")}`
+      ].filter(Boolean).join("<br>");
+
+      const item = document.createElement("div");
+      item.className = "item";
+      item.innerHTML = `
+        <div style="flex:1">
+          <div class="a">${title}</div>
+          <div class="b">${sub}</div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" data-act="accept" data-id="${r.id}">✅ Prendre</button>
+            <button class="btn" data-act="deliver" data-id="${r.id}">📦 Terminer</button>
+            <button class="btn danger" data-act="cancel" data-id="${r.id}">🧨 Annuler</button>
+            <button class="btn danger" data-act="del" data-id="${r.id}">🗑️ Supprimer</button>
+          </div>
+        </div>
+        <div>${badge(r.status)}</div>
+      `;
+      list.appendChild(item);
+    }
+  }
+
+  function update(id, patch){
+    const rows = load();
+    const i = rows.findIndex(x=>x.id===id);
+    if(i<0) return;
+    rows[i] = { ...rows[i], ...patch, updated_at: nowISO() };
+    save(rows);
+    render();
+  }
+  function remove(id){
+    save(load().filter(x=>x.id!==id));
+    render();
+  }
+
+  // status chauffeur (dispo)
+  function applyDriverStatus(){
+    const st = readStatus() || { available:true, zone:"saly", ts: Date.now() };
+    const btn = document.getElementById("btnToggle");
+    document.getElementById("zone").value = st.zone || "saly";
+    if(st.available){
+      btn.textContent = "🟢 Disponible";
+      btn.classList.add("primary");
+    } else {
+      btn.textContent = "🔴 Indisponible";
+      btn.classList.remove("primary");
+    }
+    writeStatus(st);
+  }
+
+  document.getElementById("btnToggle").onclick = ()=>{
+    const st = readStatus() || { available:true, zone:"saly", ts: Date.now() };
+    st.available = !st.available;
+    st.ts = Date.now();
+    writeStatus(st);
+    applyDriverStatus();
+  };
+
+  document.getElementById("zone").onchange = ()=>{
+    const st = readStatus() || { available:true, zone:"saly", ts: Date.now() };
+    st.zone = document.getElementById("zone").value;
+    st.ts = Date.now();
+    writeStatus(st);
+  };
+
+  // add demo job
+  document.getElementById("btnNew").onclick = ()=>{
+    const st = readStatus() || { zone:"saly" };
+    const zone = document.getElementById("zone").value || st.zone || "saly";
+    const demo = {
+      id: uid(),
+      slug, owner_id: s.owner_id || null,
+      status: "pending",
+      from: "Saly",
+      to: "Dakar",
+      client: "Client démo",
+      phone: "+221",
+      price: "3000",
+      zone,
+      note: "Démo : fragile",
+      created_at: nowISO()
+    };
+    const rows = load();
+    rows.unshift(demo);
+    save(rows);
+    render();
+  };
+
+  // actions list
+  document.addEventListener("click",(e)=>{
+    const b = e.target.closest("button[data-act]");
+    if(!b) return;
+    const id = b.getAttribute("data-id");
+    const act = b.getAttribute("data-act");
+    if(act==="accept") return update(id,{ status:"accepted" });
+    if(act==="deliver") return update(id,{ status:"delivered" });
+    if(act==="cancel") return update(id,{ status:"cancelled" });
+    if(act==="del") return remove(id);
+  });
+
+  document.getElementById("filter").onchange = render;
+  document.getElementById("btnPulse").onclick = ()=>alert("🔔 Inbox: V2 on branche Pulse/outbox.");
+
+  // Support
+  document.getElementById("btnHelp").onclick = ()=>{
+    const num = "+221771342889";
+    const txt = encodeURIComponent("DIGIY Support — FRET CHAUFFEUR PRO. Slug: " + (slug||"") + " • Besoin d’aide.");
+    location.href = "https://wa.me/" + num.replace("+","") + "?text=" + txt;
+  };
+
+  // Logout
+  document.getElementById("btnLogout").onclick = ()=>{
+    localStorage.removeItem("DIGIY_ACCESS");
+    location.href = "./pin.html" + (slug ? ("?slug="+encodeURIComponent(slug)) : "");
+  };
+
+  // Export / Reset
+  document.getElementById("btnExport").onclick = ()=>{
+    const rows = load();
+    const blob = new Blob([JSON.stringify(rows,null,2)], { type:"application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "fret-driver-" + (slug||"pro") + ".json";
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 800);
+  };
+  document.getElementById("btnReset").onclick = ()=>{
+    if(confirm("Reset démo pour ce slug ?")){
+      localStorage.removeItem(KEY);
+      localStorage.removeItem(KEY_STATUS);
+      applyDriverStatus();
+      render();
+    }
+  };
+
+  // init
+  applyDriverStatus();
+  render();
+</script>
 </body>
 </html>
